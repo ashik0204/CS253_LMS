@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "CS253 Library System Build",
+            "command": "E:\\cfold\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-I${workspaceFolder}/include",  // Add include path
+                "-I${workspaceFolder}",         // For files in root directory
+                "-g",
+                "${workspaceFolder}/src/*.cpp", // Compile all source files
+                "-o",
+                "${workspaceFolder}/bin/lms.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "CS253 Assignment Build Configuration"
+        }
+    ]
+}
