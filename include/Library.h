@@ -10,8 +10,7 @@ class Library {
 public:
     Library();
     ~Library();
-    bool authenticateUser(const std::string& uid, const std::string& upassword);
-    void createUser(int uid, const std::string& upassword, bool isFaculty);
-    void deleteUser(int uid);
-    void updateUser(int uid, const std::string& upassword);
+    bool authenticateUser(const std::string& uid, const std::string& upassword,int &outRole);
+    bool searchBook(const std::string& ISBN, Book& book);
+
 };

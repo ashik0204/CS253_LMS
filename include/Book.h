@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <ctime>
+#include <fstream>
 
 class Book {
 private:
@@ -15,8 +16,8 @@ private:
 public:
     // Constructor with CSV-compatible parameters
     Book(std::string t = "", std::string a = "", std::string p = "", 
-        int y = 0, std::string i = "", std::string s = "Available", 
-        std::time_t d = 0);
+         int y = 0, std::string i = "", std::string s = "available", 
+         std::time_t d = 0);
 
     // Accessors
     std::string getTitle() const;
@@ -26,8 +27,11 @@ public:
     std::string getISBN() const;
     std::string getStatus() const;
     std::time_t getDueDate() const;
-    void saveToCSV(std::ostream& os) const{};
-    void loadFromCSV(std::istream& is){};
+    
+    // CSV File operations
+    void saveToCSV(std::ostream& os) const;
+    void loadFromCSV(std::istream& is); // Changed to std::istream&
+    
     // Mutators
     void setStatus(std::string s);
     void setDueDate(int days);
@@ -37,8 +41,4 @@ public:
     
     // Display method
     void display() const;
-    
-    // CSV File operations
-    void saveToFile(std::ofstream& file) const;
-    void loadFromFile(std::ifstream& file);
 };

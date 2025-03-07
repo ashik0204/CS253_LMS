@@ -1,0 +1,14 @@
+title,author,publisher,year,ISBN,status,dueDate
+C++ Primer,Stanley B. Lippman,Addison-Wesley,2012,978-0321714114,Borrowed,1717200000
+Clean Code,Robert C. Martin,Prentice Hall,2008,978-0132350884,Borrowed,1717200000
+Design Patterns,Erich Gamma,Addison-Wesley,1994,978-0201633610,Borrowed,1716940800
+Effective Modern C++,Scott Meyers,O'Reilly Media,2014,978-1491903995,Reserved,0
+The C++ Programming Language,Bjarne Stroustrup,Addison-Wesley,2013,978-0321563842,Borrowed,1742621278
+Introduction to Algorithms,Thomas H. Cormen,MIT Press,2009,978-0262033848,available,0
+The Pragmatic Programmer,Andrew Hunt,Addison-Wesley,1999,978-0201616224,Borrowed,1717632000
+Code Complete,Steve McConnell,Microsoft Press,2004,978-0735619678,Borrowed,1717203600
+You Don't Know JS,Kyle Simpson,O'Reilly Media,2015,978-1491904243,available,0
+Structure and Interpretation of Computer Programs,Harold Abelson,MIT Press,1996,978-0262510875,Borrowed,1717804800
+Computer Networking: A Top-Down Approach,James F. Kurose,Pearson,2016,978-0133594140,Borrowed,1742615826
+Modern Operating Systems,Andrew S. Tanenbaum,Pearson,2014,978-0133591620,Borrowed,1717910400
+ashiks biography,asher,ash pub,2024,978-1234567889,Available,0

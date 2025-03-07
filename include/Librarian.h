@@ -1,25 +1,21 @@
 #pragma once
 #include "User.h"
-
+#include "Book.h"
+#include <string>
+#include <ctime>
 class Librarian : public User
 {
 public:
     //constructor
-    Librarian(int uid, const std::string &uname, const std::string &upassword);
+    Librarian(std::string uid, const std::string &upassword);
     //librarian specific methods
-    void create_user(int uid, std::string uname, std::string upassword,bool type);
-    void delete_user(int uid);
-    void update_user(int uid, std::string uname, std::string upassword);
-    void search_user(int uid);
-    void addbook(std::string title, std::string author, std::string publisher, int year, std::string ISBN, std::string status, std::time_t dueDate);
-    void deletebook(std::string ISBN);
-    void updatebook(std::string ISBN, std::string status, std::time_t dueDate);
-    void searchbook(std::string ISBN);
-    //overridden methods
-    
-
-    //overridden methods
-    void saveToFile(std::ofstream& file) const;
-    void loadFromFile(std::ifstream& file);
+    bool create_user(std::string uid, std::string upassword,int role);
+    bool delete_user(std::string uid);
+    bool update_user(std::string old_uid,std::string new_uid, std::string new_upassword);
+    bool search_user(std::string uid, User &user);
+    bool addbook(std::string title, std::string author, std::string publisher, int year, std::string ISBN, std::string status, std::time_t dueDate);
+    bool deletebook(std::string ISBN);
+    bool updatebook(std::string ISBN, std::string status, int dueDate);
+    bool searchbook(std::string ISBN, Book &book);
 
 };

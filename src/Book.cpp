@@ -1,3 +1,4 @@
+
 #include "Book.h"
 #include <iostream>
 #include <ctime>
@@ -22,7 +23,11 @@ std::time_t Book::getDueDate() const { return dueDate; }
 // Mutators
 void Book::setStatus(std::string s) { status = s; }
 void Book::setDueDate(int days) { 
-    dueDate = std::time(0) + days * 24 * 60 * 60; 
+    if(days == 0) {
+        dueDate = 0;
+    } else {
+        dueDate = std::time(0) + days * 24 * 60 * 60; 
+    }
 }
 
 bool Book::isOverdue() const { 
@@ -44,25 +49,25 @@ void Book::display() const {
 void Book::saveToCSV(std::ostream& os) const {
     os << title << "," << author << "," << publisher << ","
        << year << "," << ISBN << "," << status << ","
-       << dueDate;
+       << dueDate<<"\n";
 }
 
 void Book::loadFromCSV(std::istream& is) {
-    std::string line;
-    std::getline(is, line);
-    std::stringstream ss(line);
-    
-    std::getline(ss, title, ',');
-    std::getline(ss, author, ',');
-    std::getline(ss, publisher, ',');
-    
     std::string temp;
-    std::getline(ss, temp, ',');
+    
+    std::getline(is, title, ',');
+    std::getline(is, author, ',');
+    std::getline(is, publisher, ',');
+    
+    std::getline(is, temp, ',');
     year = std::stoi(temp);
     
-    std::getline(ss, ISBN, ',');
-    std::getline(ss, status, ',');
-    
-    std::getline(ss, temp);
-    dueDate = std::stol(temp);
+    std::getline(is, ISBN, ',');
+    std::getline(is, status, ',');
+
+    if (std::getline(is, temp)) {
+        dueDate = std::stol(temp);
+    } else {
+        dueDate = 0; // Default value if missing
+    }
 }

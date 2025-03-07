@@ -10,12 +10,12 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": true,
+            "externalConsole": false,  // Changed to false for VS Code terminal
             "MIMode": "gdb",
             "miDebuggerPath": "E:\\cfold\\ucrt64\\bin\\gdb.exe",
             "setupCommands": [
                 {
-                    "description": "Enable pretty-printing for gdb",
+                    "description": "Enable pretty-printing",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }

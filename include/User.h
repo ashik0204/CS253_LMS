@@ -7,8 +7,9 @@
         //data members
         std::string uid;
         std::string upassword;
-        Account account;
+        
     public:
+        Account account;
         //constructor
         User(const std::string &uid, const std::string &upassword);
 
@@ -16,6 +17,6 @@
         std::string getUid() const;
         std::string getUpassword() const;
         Account getAccount();
-        void setUname(const std::string &uname);
+        bool setUid(const std::string &uname);
         void setUpassword(const std::string &upassword);
  };
