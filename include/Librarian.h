@@ -13,9 +13,9 @@ public:
     int delete_user(std::string uid);
     // bool update_user(std::string old_uid,std::string new_uid, std::string new_upassword);
     bool search_user(std::string uid);
-    bool addbook(std::string title, std::string author, std::string publisher, int year, std::string ISBN, std::string status, std::time_t dueDate);
-    int deletebook(std::string ISBN);
-    bool updatebook(std::string ISBN, std::string status);
-    bool searchbook(std::string ISBN, Book &book);
+    bool addbook(std::string bookID,std::string title, std::string author, std::string publisher, int year, std::string ISBN, std::string status, std::time_t dueDate,std::string reserved);
+    int deletebook(std::string bookID);
+    bool updatebook(std::string bookID, std::string reserved);
+    bool searchbook(std::string bookID, Book &book);
 
 };
