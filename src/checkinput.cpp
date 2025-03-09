@@ -1,6 +1,8 @@
 #include "checkinput.h"
 #include <string>
 #include <cctype>
+#include <fstream>
+#include <sstream>
 #include <algorithm>
 int count_ISBN_digits(const std::string &ISBN) {
     int counter_var=0;
@@ -21,7 +23,7 @@ bool checkinput::days_to_int_convertible(const std::string &days, int &daysInt) 
     }
  }
  bool checkinput::status_check(const std::string &status) {
-    return status == "Available" || status == "Reserved" || status == "Borrowed";
+    return status == "Available" || status == "Borrowed";
  }
  bool checkinput::ISBN_check(const std::string &ISBN) {
     return count_ISBN_digits(ISBN) == 13 && std::all_of(ISBN.begin(), ISBN.end(), [](char c) { return std::isdigit(c)||(c=='-'); });
@@ -40,4 +42,36 @@ bool checkinput::days_to_int_convertible(const std::string &days, int &daysInt) 
 
      ISBN = temp;
  }
- 
+
+ bool checkinput::checkifbookIDexists(const std::string& bookID){
+    std::ifstream file("data/books.csv");
+    if (!file.is_open()) return false;
+
+    std::string line;
+    
+    // Skip header
+    std::getline(file, line);
+
+    while(std::getline(file, line)){
+        std::stringstream ss(line);
+        std::string current_bookID;
+        std::getline(ss, current_bookID, ',');
+
+        if(current_bookID == bookID) return true;
+    }
+    
+    return false;
+}
+bool checkinput::checkifUIDexists(const std::string &uid){
+    std::ifstream file("data/users.csv");
+    std::string line;
+    //skip header
+    std::getline(file, line);
+    while(std::getline(file, line)){
+        std::stringstream ss(line);
+        std::string current_uid;
+        std::getline(ss, current_uid, ',');
+        if(current_uid==uid) return true;
+    }
+    return false;
+}

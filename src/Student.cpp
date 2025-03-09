@@ -29,9 +29,9 @@ bool Student::reserveBook(Book &book) {
     getAccount();
     return account.reserveBook(book,uid);
 }
-void Student::payFine(float amount,std::string Uid) {
+bool Student::payFine(float amount,std::string Uid) {
     getAccount();
-    account.payFine(amount,Uid);
+    return account.payFine(amount,Uid);
 }
 
 

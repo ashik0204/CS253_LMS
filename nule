@@ -1,0 +1,64 @@
+Account.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(401): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(401): note: the template instantiation context (the oldest one first) is
+src\Account.cpp(85): note: see reference to class template instantiation 'std::basic_ostream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(394): note: while compiling class template member function 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(float)'
+src\Account.cpp(163): note: see the first reference to 'std::basic_ostream<char,std::char_traits<char>>::operator <<' in 'Account::saveToFile'
+Book.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): note: the template instantiation context (the oldest one first) is
+src\Book.cpp(40): note: see reference to class template instantiation 'std::basic_ostream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(358): note: while compiling class template member function 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)'
+src\Book.cpp(56): note: see the first reference to 'std::basic_ostream<char,std::char_traits<char>>::operator <<' in 'Book::saveToCSV'
+checkinput.cpp
+src\checkinput.cpp(17): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+Faculty.cpp
+Librarian.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): note: the template instantiation context (the oldest one first) is
+src\Librarian.cpp(22): note: see reference to class template instantiation 'std::basic_ofstream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\fstream(177): note: see reference to class template instantiation 'std::basic_ostream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(358): note: while compiling class template member function 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)'
+src\Librarian.cpp(133): note: see the first reference to 'std::basic_ostream<char,std::char_traits<char>>::operator <<' in 'Librarian::addbook'
+Library.cpp
+src\Library.cpp(68): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+main.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\istream(508): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\istream(508): note: the template instantiation context (the oldest one first) is
+src\main.cpp(12): note: see reference to class template instantiation 'std::basic_istream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\istream(501): note: while compiling class template member function 'std::basic_istream<char,std::char_traits<char>> &std::basic_istream<char,std::char_traits<char>>::ignore(std::streamsize,int)'
+src\main.cpp(70): note: see the first reference to 'std::basic_istream<char,std::char_traits<char>>::ignore' in 'main'
+Student.cpp
+src\Student.cpp(32): error C2556: 'void Student::payFine(float,std::string)': overloaded function differs only by return type from 'bool Student::payFine(float,std::string)'
+include\Student.h(20): note: see declaration of 'Student::payFine'
+src\Student.cpp(32): error C2371: 'Student::payFine': redefinition; different basic types
+include\Student.h(20): note: see declaration of 'Student::payFine'
+User.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(781): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(781): note: the template instantiation context (the oldest one first) is
+src\User.cpp(40): note: see reference to function template instantiation 'std::basic_ostream<char,std::char_traits<char>> &std::operator <<<std::char_traits<char>>(std::basic_ostream<char,std::char_traits<char>> &,const char *)' being compiled
+Account.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(401): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(401): note: the template instantiation context (the oldest one first) is
+src\Account.cpp(85): note: see reference to class template instantiation 'std::basic_ostream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(394): note: while compiling class template member function 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(float)'
+src\Account.cpp(163): note: see the first reference to 'std::basic_ostream<char,std::char_traits<char>>::operator <<' in 'Account::saveToFile'
+Book.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): note: the template instantiation context (the oldest one first) is
+src\Book.cpp(40): note: see reference to class template instantiation 'std::basic_ostream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(358): note: while compiling class template member function 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)'
+src\Book.cpp(56): note: see the first reference to 'std::basic_ostream<char,std::char_traits<char>>::operator <<' in 'Book::saveToCSV'
+checkinput.cpp
+src\checkinput.cpp(17): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+Faculty.cpp
+Librarian.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(365): note: the template instantiation context (the oldest one first) is
+src\Librarian.cpp(22): note: see reference to class template instantiation 'std::basic_ofstream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\fstream(177): note: see reference to class template instantiation 'std::basic_ostream<char,std::char_traits<char>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.43.34808\include\__msvc_ostream.hpp(358): note: while compiling class template member function 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::operator <<(__int64)'
+src\Librarian.cpp(133): note: see the first reference to 'std::basic_ostream<char,std::char_traits<char>>::operator <<' in 'Librarian::addbook'
+Library.cpp
+src\Library.cpp(68): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+main.cpp

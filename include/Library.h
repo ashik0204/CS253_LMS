@@ -12,6 +12,7 @@ public:
     Library();
     ~Library();
     bool authenticateUser(const std::string& uid, const std::string& upassword,int &outRole);
-    bool searchBook(const std::string& ISBN, Book& book);
+    bool searchBook(const std::string& bookID, Book& book);
     void displayBooks() const;
+    void displayBooksforReservation() const;
 };

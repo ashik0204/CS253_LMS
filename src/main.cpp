@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <limits>
 using namespace std;
 
 int main(){
@@ -47,7 +48,7 @@ int main(){
                          << "0. Exit\n"
                          << "Choice: ";
                     cin >> main_menu;
-            
+                    checkinput checkinput_obj;
                     if(main_menu == 1) {  // User Management
                         int user_menu = 1;
                         while(user_menu) {
@@ -66,9 +67,14 @@ int main(){
                                 case 1: {
                                     int role;
                                     cout << "Enter new user ID: ";
-                                    cin >> uid_input;
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, uid_input);
+                                    while(checkinput_obj.checkifUIDexists(uid_input)){
+                                        cout<<"User ID already exists, please enter another ID"<<endl;
+                                        getline(cin, uid_input);
+                                    }
                                     cout << "Enter password: ";
-                                    cin >> password;
+                                    getline(cin, password);
                                     cout << "Enter role (1-Librarian, 2-Student, 3-Faculty): ";
                                     cin >> role;
                                     
@@ -79,10 +85,11 @@ int main(){
                                     }
                                     break;
                                 }
-                                
+
                                 case 2: {
                                     cout << "Enter user ID to delete: ";
-                                    cin >> uid_input;
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, uid_input);
                                     int case_del=librarian.delete_user(uid_input);
                                     switch(case_del){
                                         case 0:{
@@ -104,31 +111,18 @@ int main(){
                                     }
                                     break;
                                 }
-                                // case 3: {
-                                //     cout << "Enter old user ID: ";
-                                //     cin >> uid_input;
-                                //     cout << "Enter new user ID: ";
-                                //     cin >> new_uid;
-                                //     cout << "Enter new password: ";
-                                //     cin >> password;
-                                    
-                                //     if(librarian.update_user(uid_input, new_uid, password)) {
-                                //         cout << "User updated successfully!" << endl;
-                                //     } else {
-                                //         cout << "User update failed!" << endl;
-                                //     }
-                                //     break;
-                                // }
+                                
                                 case 3: {
                                     cout << "Enter user ID to search: ";
-                                    cin >> uid_input;
-                                    if(librarian.search_user(uid_input)) {  \
-
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, uid_input);
+                                    if(librarian.search_user(uid_input)) {
                                     } else {
                                         cout << "User not found!" << endl;
                                     }
                                     break;
                                 }
+
                                 case 0:{
                                     break;
                                 }
@@ -140,7 +134,7 @@ int main(){
                     }
                     else if(main_menu == 2) {  // Book Management
                         int book_menu = 1;
-                        checkinput checkinput_obj;
+                        
                         while(book_menu) {
                             cout << "\n--------BOOK MANAGEMENT--------\n"
                                  << "1. Add Book\n"
@@ -151,35 +145,41 @@ int main(){
                                  << "Choice: ";
                             cin >> book_menu;
             
-                            string ISBN, title, author, publisher, status;
+                            string bookID,ISBN, title, author, publisher, status,reserved;
                             int year;
                             time_t dueDate;
                             Book found_book;
                             
                             switch(book_menu) {
                                 case 1: {
+                                    cout<< "Enter book ID: ";
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, bookID);
+                                    while(checkinput_obj.checkifbookIDexists(bookID)){
+                                        cout<<"Book ID already exists! Enter a different book ID: ";
+                                        getline(cin, bookID);
+                                    }
                                     cout << "Enter book title: ";
-                                    cin.ignore();
                                     getline(cin, title);
                                     cout << "Enter author: ";
                                     getline(cin, author);
                                     cout << "Enter publisher: ";
                                     getline(cin, publisher);
                                     cout << "Enter publication year: ";
-                                    cin >> year;
+                                    cin>>year;
                                     cout << "Enter ISBN: ";
-                                    
-                                    cin >> ISBN;
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, ISBN);
                                     while(!checkinput_obj.ISBN_check(ISBN)){
                                         cout<<"Enter a valid ISBN: ";
-                                        cin>>ISBN;
+                                        getline(cin, ISBN);
                                     }
                                     checkinput_obj.ISBN_standardize(ISBN);
-                                    cout << "Enter initial status (Available/Borrowed/Reserved): ";
-                                    cin >> status;
+                                    cout << "Enter initial status (Available/Borrowed): ";
+                                    getline(cin, status);
                                     while(!checkinput_obj.status_check(status)){
                                         cout<<"Enter a valid status: ";
-                                        cin>>status;
+                                        getline(cin, status);
                                     }
                                     
                                     dueDate = 0;  // Default
@@ -189,19 +189,20 @@ int main(){
                                         cin>>days;
                                         dueDate = std::time(0) + days * 24 * 60 * 60;
                                     }
-            
-                                    if(librarian.addbook(title, author, publisher, year, ISBN, status, dueDate)) {
+                                    
+                                    if(librarian.addbook(bookID,title, author, publisher, year, ISBN, status, dueDate,"0")) {
                                         cout << "Book added successfully!" << endl;
                                     }
                                     else {
-                                        cout << "Failed to add book! (NOTE!!! ISBN has to be unique)" << endl;
+                                        cout << "Failed to add book! (NOTE!!! bookID has to be unique)" << endl;
                                     }
                                     break;
                                 }
                                 case 2: {
-                                    cout << "Enter ISBN to delete: ";
-                                    cin >> ISBN;
-                                    int case_del=librarian.deletebook(ISBN);
+                                    cout << "Enter bookID to delete: ";
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, bookID);
+                                    int case_del=librarian.deletebook(bookID);
                                     switch(case_del){
                                         case 0:{
                                             cout << "Book not found!" << endl;
@@ -224,33 +225,16 @@ int main(){
                                 }
                                 case 3: {
                                     
-                                    cout << "Enter ISBN to update(a 13 digit number(- allowed between numbers)): ";
-                                    cin >> ISBN;
-                                    while(checkinput_obj.ISBN_check(ISBN) == false){
-                                        cout << "Invalid input!\n" <<"ISBN has to be a 13 digit number"<< endl;
-                                        cout << "Enter ISBN to update: ";
-                                        cin >> ISBN;
+                                    cout<<"Enter bookID to update: ";
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, bookID);
+                                    if(!checkinput_obj.checkifbookIDexists(bookID)){
+                                        cout<<"Book ID does not exist! "<<endl;
                                     }
-                                    checkinput_obj.ISBN_standardize(ISBN);
-                                    cout << "Enter new status: ";
-                                    // cin.ignore();
-                                    // try{
-                                    //     if(status!="Available" && status!="Borrowed" && status!="Reserved"){
-                                    //         throw 1;
-                                    //     }
-                                    //     catch(...){
-                                    //         cout<<"Invalid input!"<<endl;
-                                    //         break;
-                                    //     }
-                                    // }
-
-                                    cin >> status;
-                                    while(checkinput_obj.status_check(status) == false){
-                                        cout << "Invalid input!" << endl;
-                                        cout << "Enter new status:\n"<<"(Available/Borrowed/Reserved): ";
-                                        cin >> status;
-                                    }
-                                    if(librarian.updatebook(ISBN, status)){
+                                    cout << "Enter new reserved status(0/1): ";
+                                    getline(cin, reserved);
+                                    
+                                    if(librarian.updatebook(bookID, reserved)){
                                         cout << "Book updated successfully!" << endl;
                                     }
                                     else{
@@ -259,9 +243,10 @@ int main(){
                                     break;
                                 }
                                 case 4: {
-                                    cout << "Enter ISBN to search: ";
-                                    cin >> ISBN;
-                                    if(librarian.searchbook(ISBN, found_book)){
+                                    cout << "Enter bookID to search: ";
+                                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                                    getline(cin, bookID);
+                                    if(librarian.searchbook(bookID, found_book)){
                                         cout << "Book details:\n";
                                         found_book.display();
                                     }
@@ -298,15 +283,18 @@ int main(){
                 while(update){
                     cout<<"Enter new user id"<<endl;
                     string new_uid;
-                    cin>>new_uid;
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    getline(cin, new_uid);
                     bool flag=student.setUid(new_uid);
                     if(!flag){
                         cout<<"Please provide a different userid"<<endl;
                         continue;
                     }
                     cout<<"Enter new password"<<endl;
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     string new_upassword;
-                    cin>>new_upassword;
+                    
+                    getline(cin, new_upassword);
                     
                     student.setUpassword(new_upassword);
                     update=0;
@@ -323,11 +311,14 @@ int main(){
                     switch(choice){
                         case 1:{
                             l1.displayBooks();
-                            cout<<"Enter ISBN of book you want to borrow"<<endl;
-                            string ISBN;
+                            cout<<"Enter bookID of book you want to borrow"<<endl;
+                            string bookID;
                             Book book;
-                            cin>>ISBN;
-                            bool flag= l1.searchBook(ISBN,book);
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                            getline(cin, bookID);
+
+                            bool flag= l1.searchBook(bookID, book);
                             if(!flag){
                                 cout<<"Book not found"<<endl;
                                 break;
@@ -346,11 +337,12 @@ int main(){
                             break;
                         }
                         case 2:{
-                            cout<<"Enter ISBN of book you want to return"<<endl;
-                            string ISBN;
+                            cout<<"Enter bookID of book you want to return"<<endl;
+                            string bookID;
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                             Book book;
-                            cin>>ISBN;
-                            bool flag= l1.searchBook(ISBN,book);
+                            getline(cin, bookID);
+                            bool flag= l1.searchBook(bookID,book);
                             if(!flag){
                                 cout<<"Book not found"<<endl;
                                 break;
@@ -368,12 +360,13 @@ int main(){
                             break;
                         }
                         case 3:{
-                            l1.displayBooks();
-                            cout<<"Enter ISBN of book you want to reserve"<<endl;
-                            string ISBN;
+                            l1.displayBooksforReservation();
+                            cout<<"Enter bookID of book you want to reserve"<<endl;
+                            string bookID;
                             Book book;
-                            cin>>ISBN;
-                            bool flag= l1.searchBook(ISBN,book);    
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            getline(cin, bookID);
+                            bool flag= l1.searchBook(bookID,book);    
                             if(!flag){
                                 cout<<"Book not found"<<endl;
                                 break;
@@ -382,7 +375,7 @@ int main(){
                                 cout<<"Book reserved successfully"<<endl;
                             }
                             else{
-                                cout<<"Book not available"<<endl;
+                                cout<<"Book reservation failed"<<endl;
                             }
                             break;
                         }
@@ -390,8 +383,10 @@ int main(){
                             cout<<"Enter amount you want to pay"<<endl;
                             float amount;
                             cin>>amount;
-                            student.payFine(amount,uid);
-                            cout<<"Fine paid successfully"<<endl;
+                            bool flag=student.payFine(amount,uid);
+                            if(flag){
+                                cout<<"Fine paid successfully"<<endl;
+                            }
                             break;
                         }
                         case 5:{
@@ -452,7 +447,8 @@ int main(){
                 while(update){
                     cout<<"Enter new user id"<<endl;
                     string new_uid;
-                    cin>>new_uid;
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    getline(cin, new_uid);
                     bool flag=faculty.setUid(new_uid);
                     if(!flag){
                         cout<<"Please provide a different userid"<<endl;
@@ -460,7 +456,7 @@ int main(){
                     }
                     cout<<"Enter new password"<<endl;
                     string new_upassword;
-                    cin>>new_upassword;
+                    getline(cin, new_upassword);
                     
                     faculty.setUpassword(new_upassword);
                     update=0;
@@ -476,11 +472,12 @@ int main(){
                     cin>>choice;
                     switch(choice){
                         case 1:{
-                            cout<<"Enter ISBN of book you want to borrow"<<endl;
-                            string ISBN;
+                            l1.displayBooks();
+                            cout<<"Enter bookID of book you want to borrow"<<endl;
+                            string bookID;
                             Book book;
-                            cin>>ISBN;
-                            bool flag= l1.searchBook(ISBN,book);
+                            getline(cin, bookID);
+                            bool flag= l1.searchBook(bookID,book);
                             if(!flag){
                                 cout<<"Book not found"<<endl;
                                 break;
@@ -500,10 +497,10 @@ int main(){
                         }
                         case 2:{
                             cout<<"Enter ISBN of book you want to return"<<endl;
-                            string ISBN;
+                            string bookID;
                             Book book;
-                            cin>>ISBN;
-                            bool flag= l1.searchBook(ISBN,book);
+                            getline(cin, bookID);
+                            bool flag= l1.searchBook(bookID,book);
                             if(!flag){
                                 cout<<"Book not found"<<endl;
                                 break;
@@ -521,11 +518,12 @@ int main(){
                             break;
                         }
                         case 3:{
-                            cout<<"Enter ISBN of book you want to reserve"<<endl;
-                            string ISBN;
+                            l1.displayBooksforReservation();
+                            cout<<"Enter bookID of book you want to reserve"<<endl;
+                            string bookID;
                             Book book;
-                            cin>>ISBN;
-                            bool flag= l1.searchBook(ISBN,book);    
+                            getline(cin, bookID);
+                            bool flag= l1.searchBook(bookID,book);    
                             if(!flag){
                                 cout<<"Book not found"<<endl;
                                 break;

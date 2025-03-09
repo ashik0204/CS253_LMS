@@ -17,8 +17,5 @@ class Student: public User{
         bool borrowBook( Book &book);
         bool reserveBook(Book &book);
         bool returnBook(Book &book);
-        void payFine(float amount,std::string Uid);
-        // std::vector<Book>& getBorrowingHistory();
-        // std::vector<Book>& getBorrowedBooks();
-        // std::vector<Book>& getOverdueBooks();
+        bool payFine(float amount,std::string Uid);
 };
