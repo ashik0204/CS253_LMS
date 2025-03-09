@@ -23,21 +23,45 @@ void Library::displayBooks() const{
     std::string line;
     // Skip header line
     std::getline(fin, line);
-    std::cout<<"ISBN\tTitle"<<std::endl;
+    std::cout<<"BookID\tTitle"<<std::endl;
     while (std::getline(fin, line)) {
         std::stringstream ss(line);
-        std::string ISBN, title,status;
-        //loading title
+        std::string bookID, title,status;
+        //;pading bookID
+        std::getline(ss, bookID, ',');
         std::getline(ss, title, ',');
-        //ignoring other fields
         std::string temp;
-        for(int i=0;i<3;i++) {
+        for(int i=0;i<4;i++){
             std::getline(ss, temp, ',');
         }
-        //loading ISBN
-        std::getline(ss, ISBN, ',');
         std::getline(ss, status, ',');
-        if(status=="Available"||status=="available") std::cout<<ISBN<<"\t"<<title<<std::endl;
+        if(status=="Available"||status=="available") std::cout<<bookID<<"\t"<<title<<std::endl;
+    }
+    fin.close();
+}
+void Library::displayBooksforReservation() const{
+    std::ifstream fin("data/books.csv");
+    if (!fin.is_open()) {
+        std::cerr << "Error: Unable to open books file" << std::endl;
+        return;
+    }       
+
+    std::string line;
+    // Skip header line
+    std::getline(fin, line);
+    std::cout<<"BookID\tTitle"<<std::endl;
+    while (std::getline(fin, line)) {
+        std::stringstream ss(line);
+        std::string bookID, title,status;
+        //;pading bookID
+        std::getline(ss, bookID, ',');
+        std::getline(ss, title, ',');
+        std::string temp;
+        for(int i=0;i<6;i++){
+            std::getline(ss, temp, ',');
+        }
+        std::getline(ss, status, ',');
+        if(status=="0") std::cout<<bookID<<"\t"<<title<<std::endl;
     }
     fin.close();
 }
@@ -89,7 +113,7 @@ bool Library::authenticateUser(const std::string& uid,
 }
 
 
-bool Library::searchBook(const std::string& ISBN, Book &book) {
+bool Library::searchBook(const std::string& bookID, Book &book) {
     std::ifstream fin("data/books.csv");
     if (!fin.is_open()) return false;
 
@@ -99,21 +123,12 @@ bool Library::searchBook(const std::string& ISBN, Book &book) {
 
     while (std::getline(fin, line)) {
         std::stringstream ss(line);
-        std::string field;
-        
-        // Skip first 4 fields (title, author, publisher, year)
-        for(int i = 0; i < 4; i++) {
-            std::getline(ss, field, ',');
-        }
-        
-        // Read 5th field (ISBN)
-        std::string currentISBN;
-        std::getline(ss, currentISBN, ',');
-        
-        if (currentISBN == ISBN) {
-            // Rewind and load full book data
-            ss = std::stringstream(line);  // Reset stream
-            book.loadFromCSV(ss);          // Load all fields
+        std::string current_bookID;
+        std::getline(ss, current_bookID, ',');
+        if (current_bookID == bookID) {
+            //Loading full book data
+            ss = std::stringstream(line);  // Resetting stream
+            book.loadFromCSV(ss);          // Loading  all fields
             fin.close();
             return true;
         }

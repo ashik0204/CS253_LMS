@@ -29,7 +29,7 @@ bool Account::borrowBook(Book& book,std::string Uid) {
 bool Account::returnBook(Book& book,std::string Uid) {
 
     auto it = std::find_if(borrowedBooks.begin(), borrowedBooks.end(),
-        [&book](const Book& b) { return b.getISBN() == book.getISBN(); });
+        [&book](const Book& b) { return b.getBookID() == book.getBookID(); });
         // std::cout<<"HERE"<<std::endl;
     if (it != borrowedBooks.end()) {
         // Calculate overdue days
@@ -65,11 +65,14 @@ bool Account::returnBook(Book& book,std::string Uid) {
 }
 bool Account::reserveBook(Book& book,std::string Uid) {
     
-    if (canBorrow()&&(book.getStatus() == "available"||book.getStatus() == "Available")) {
-        book.setStatus("Reserved");
-        updateAccount(Uid);
-        updateBookInCSV(book);
-        return true;
+    if (canBorrow()) {
+        if(book.getReserved()=="0"){
+            book.setReserved("1");
+            updateBookInCSV(book);
+            return true;
+        }
+        
+        return false;
     }
     return false;
 }
@@ -78,7 +81,14 @@ int Account::calculateFine(int overdueDays) const {
 }
 
 bool Account::payFine(float amount,std::string Uid) {
-    if (this->isFaculty) return false;
+    if (this->isFaculty) {
+        std::cout<<"Faculty members cannot pay fines."<<std::endl;
+        return false;
+    }
+    if(amount>this->fines) {
+        std::cout<<"You can not pay more than your fine. Please go check your fine amount from the menu"<<std::endl;
+        return false;
+    }
     fines = std::max(0.0f,this->fines - amount);
     if(updateAccount(Uid)){
         return true;
@@ -97,12 +107,12 @@ bool Account::canBorrow() const {
 
 // CSV helper implementations
 std::string Account::booksToCSV(const std::vector<Book>& books) const {
-    std::string book_ISBN="";
+    std::string book_bookID="";
     for (size_t i = 0; i < books.size(); ++i) {
-        if(i!=0) book_ISBN+="|";
-        book_ISBN+=books[i].getISBN();
+        if(i!=0) book_bookID+="|";
+        book_bookID+=books[i].getBookID();
     }
-    return book_ISBN;
+    return book_bookID;
 }
 
 void Account::csvToBooks(const std::string& csv, std::vector<Book>& target) {
@@ -122,34 +132,25 @@ void Account::csvToBooks(const std::string& csv, std::vector<Book>& target) {
 }
 void Account::updateBookInCSV(const Book& book) {
     // Read all books from file
-    std::vector<Book> books;
-    std::ifstream in("data/books.csv");
-    std::string header;
-    std::getline(in, header); // Skip header
-    
     std::string line;
+    std::vector<std::string> lines;
+    std::ifstream in("data/books.csv");
     while(std::getline(in, line)) {
-        Book b;
+        
         std::stringstream ss(line);
-        b.loadFromCSV(ss);
-        books.push_back(b);
+        std::string bookID;
+        std::getline(ss, bookID, ',');
+        if(book.getBookID()!=bookID) lines.push_back(line);
+        else{
+            line=book.getBookID()+","+book.getTitle()+","+book.getAuthor()+","+book.getPublisher()+","+std::to_string(book.getYear())+","+book.getISBN()+","+book.getStatus()+","+std::to_string(book.getDueDate())+','+book.getReserved();
+            lines.push_back(line);
+        }
     }
     in.close();
 
-    // Find and update the book
-    for(auto& b : books) {
-        if(b.getISBN() == book.getISBN()) {
-            b = book;
-            break;
-        }
-    }
-
-    // Write back to file
+    // Writing back to file
     std::ofstream out("data/books.csv");
-    out << "title,author,publisher,year,ISBN,status,dueDate\n";
-    for(const auto& b : books) {
-        b.saveToCSV(out);
-    }
+    for(auto l:lines) out<<l<<'\n';
     out.close();
 }
 // File operations
