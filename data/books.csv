@@ -1,9 +1,9 @@
 bookID,title,author,publisher,year,ISBN,status,dueDate,reserved
 000001,C++ Primer,Stanley B. Lippman,Addison-Wesley,2012,978-0321714114,Borrowed,1717200000,0
-000002,Clean Code,Robert C. Martin,Prentice Hall,2008,978-0132350884,Borrowed,1717200000,0
+000002,Clean Code,Robert C. Martin,Prentice Hall,2008,978-0132350884,Borrowed,1730937600,0
 000003,Design Patterns,Erich Gamma,Addison-Wesley,1994,978-0201633610,Borrowed,1716940800,0
-000103,Design Patterns,Erich Gamma,Addison-Wesley,1994,978-0201633610,Available,0,0
-000004,Effective Modern C++,Scott Meyers,O'Reilly Media,2014,978-1491903995,Available,0,0
+000103,Design Patterns,Erich Gamma,Addison-Wesley,1994,978-0201633610,Borrowed,1742834481,1
+000004,Effective Modern C++,Scott Meyers,O'Reilly Media,2014,978-1491903995,Borrowed,1742834494,0
 000005,The C++ Programming Language,Bjarne Stroustrup,Addison-Wesley,2013,978-0321563842,Borrowed,1742621278,0
 000006,Introduction to Algorithms,Thomas H. Cormen,MIT Press,2009,978-0262033848,available,0,0
 000007,The Pragmatic Programmer,Andrew Hunt,Addison-Wesley,1999,978-0201616224,Borrowed,1717632000,0
@@ -13,5 +13,6 @@ bookID,title,author,publisher,year,ISBN,status,dueDate,reserved
 000011,Computer Networking: A Top-Down Approach,James F. Kurose,Pearson,2016,978-0133594140,available,0,0
 000012,Modern Operating Systems,Andrew S. Tanenbaum,Pearson,2014,978-0133591620,Borrowed,1717910400,0
 000000,ashiks book,ashik,ashiks pub,2023,988-8989898984,Available,0,0
-100000,the newest book,the newest author,the newest pub,2025,978-0000000000,Available,0,1
-000102,Clean Code,Robert C. Martin,Prentice Hall,2008,978-0132350884,Available,0,1
+100000,the newest book,the newest author,the newest pub,2025,978-0000000000,Available,0,0
+000102,Clean Code,Robert C. Martin,Prentice Hall,2008,978-0132350884,Available,0,0
+111111,the alchemist,paulo coelho,penguin,2018,978-1232342349,Borrowed,1742395655,0

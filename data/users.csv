@@ -1,5 +1,5 @@
 uid,upassword,role
-studentdie,studentpassed,2
+studentdie,studentpassedd,2
 faculty101,passwordisstrong,3
 faculty202,dr_smith,3
 libadmin,admin123,1
@@ -11,4 +11,5 @@ ashiks23,ashiksdb,2
 admin123,adminhere,1
 2266,22661,2
 2277,22771,2
+new_fac,new_fac,3
 

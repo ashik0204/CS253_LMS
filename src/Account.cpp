@@ -7,17 +7,25 @@
 #include <iostream>
 #include <algorithm>
 #include <ctime>
+
+bool Account::bookinReserved(const std::string& bookID)  {
+    for(int i=0;i<reservedBooks.size();i++) {if(reservedBooks[i].getBookID()==bookID) return true;};
+    return false;
+}
 //constructor
 Account::Account(bool faculty) : isFaculty(faculty), fines(0.0f) {}
 
 // Core functionality implementation
 bool Account::borrowBook(Book& book,std::string Uid) {
-    // std::cout<<canBorrow()<<" "<<book.getStatus()<<std::endl;
-    if (canBorrow() && (book.getStatus() == "available"||book.getStatus() == "Available")) {
+    
+    if (canBorrow()&&(book.getReserved() == "0"||bookinReserved(book.getBookID())) && (book.getStatus() == "available"||book.getStatus() == "Available")) {
         book.setStatus("Borrowed");
         book.setDueDate((isFaculty ? 30 : 15) );
         borrowedBooks.push_back(book);
-        
+        if(bookinReserved(book.getBookID())) {
+            reservedBooks.erase(std::find_if(reservedBooks.begin(), reservedBooks.end(), [&book](const Book& b) { return b.getBookID() == book.getBookID(); }));
+            book.setReserved("0");
+        }
         // Update CSV
         updateAccount(Uid);
         updateBookInCSV(book);
@@ -41,23 +49,17 @@ bool Account::returnBook(Book& book,std::string Uid) {
             fines += overdueDays * 10;
         }
 
-        // Update book status and history
+        // Updating book status and history
         book.setStatus("Available");
-        book.setDueDate(0); // Reset due date
+        book.setDueDate(0); // Resetting due date
         borrowingHistory.push_back(*it);
         
-        // Record overdue books
+        //overdue books
         if (overdueDays > 0) {
             overdueBooks.push_back(*it);
         }
-        // std::cout<<it->getISBN()<<std::endl;
-        // std::cout<<borrowedBooks.size()<<std::endl;
         borrowedBooks.erase(it);
-        // std::cout<<borrowedBooks.size()<<std::endl;
-        // std::cout<<"HERE"<<std::endl;
         updateAccount(Uid);
-        // Update CSV
-        // std::cout<<"HERE"<<std::endl;
         updateBookInCSV(book);
         return true;
     }
@@ -66,8 +68,10 @@ bool Account::returnBook(Book& book,std::string Uid) {
 bool Account::reserveBook(Book& book,std::string Uid) {
     
     if (canBorrow()) {
-        if(book.getReserved()=="0"){
+        if(book.getReserved()=="0"){ 
             book.setReserved("1");
+            reservedBooks.push_back(book);
+            updateAccount(Uid);
             updateBookInCSV(book);
             return true;
         }
@@ -76,7 +80,7 @@ bool Account::reserveBook(Book& book,std::string Uid) {
     }
     return false;
 }
-int Account::calculateFine(int overdueDays) const {
+int Account::calculateFine(int overdueDays) const  {
     return overdueDays * 10;
 }
 
@@ -160,7 +164,8 @@ void Account::saveToFile(std::ofstream& file,const std::string &uid) const {
          << fines << ','
          << booksToCSV(borrowedBooks) << ','
          << booksToCSV(overdueBooks) << ','
-         << booksToCSV(borrowingHistory) << '\n';
+         << booksToCSV(borrowingHistory) << ','
+         << booksToCSV(reservedBooks) << '\n';
 }
 
 bool Account::loadFromFile( std::ifstream &file, const std::string &targetuid) {
@@ -198,6 +203,9 @@ bool Account::loadFromFile( std::ifstream &file, const std::string &targetuid) {
             // Load borrowing history
             std::getline(ss, field);
             csvToBooks(field, borrowingHistory);
+            //load reserved books
+            std::getline(ss, field);
+            csvToBooks(field, reservedBooks);
 
             return true; // Successfully loaded
         }
@@ -224,7 +232,8 @@ bool Account::updateAccount(const std::string& Uid) {
                    std::to_string(fines) + "," +
                    booksToCSV(borrowedBooks) + "," +
                    booksToCSV(overdueBooks) + "," +
-                   booksToCSV(borrowingHistory);
+                   booksToCSV(borrowingHistory)+","+
+                   booksToCSV(reservedBooks);
         }
 
         lines.push_back(line);
@@ -248,6 +257,7 @@ float Account::getFines() const { return fines; }
 const std::vector<Book>& Account::getBorrowedBooks() const { return borrowedBooks; }
 const std::vector<Book>& Account::getOverdueBooks() const { return overdueBooks; }
 const std::vector<Book>& Account::getBorrowingHistory() const { return borrowingHistory; }
+const std::vector<Book>& Account::getReservedBooks() const { return reservedBooks; }
 void Account::display(std::string uid) const {
     std::cout << "\n--------ACCOUNT INFORMATION--------\n"
               << "UID: " << uid << "\n"
@@ -255,7 +265,8 @@ void Account::display(std::string uid) const {
               << "Fines: " << fines << "\n"
               << "Borrowed books: " << borrowedBooks.size() << "\n"
               << "Overdue books: " << overdueBooks.size() << "\n"
-              << "Borrowing history: " << borrowingHistory.size() << std::endl;
+              << "Borrowing history: " << borrowingHistory.size() << "\n"
+              << "Reserved books: " << reservedBooks.size() << std::endl;
     std::cout<<"Do you want to display borrowed books? (y/n): ";
     std::string choice;
     std::cin>>choice;
@@ -282,6 +293,15 @@ void Account::display(std::string uid) const {
     if (choice == "y") {
         std::cout << "\n--------BORROWING HISTORY--------\n";
         for (const auto& book : borrowingHistory) {
+            book.display();
+        }
+    }
+    std::cout<<"Do you want to display reserved books? (y/n): ";
+    std::cin>>choice;
+    
+    if (choice == "y") {
+        std::cout << "\n--------RESERVED BOOKS--------\n";
+        for (const auto& book : reservedBooks) {
             book.display();
         }
     }

@@ -45,7 +45,7 @@ void Book::display() const {
               << "Year: " << year << "\n"
               << "ISBN: " << ISBN << "\n"
               << "Status: " << status << "\n"
-              << "Reserverd: "<< reserved << "\n";
+              << "Reserved: "<< reserved << "\n";
 }
 
 //CSV File operations

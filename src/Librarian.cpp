@@ -29,7 +29,7 @@ bool Librarian::create_user(std::string uid, std::string upassword, int role) {
     if (!accounts_file) return false;
     accounts_file << uid << "," 
                 << std::boolalpha << (role != 2) << "," // isFaculty
-                << "0.0,,,\n"; // fines, borrowed, overdue, history
+                << "0.0,,,,\n"; // fines, borrowed, overdue, history
     accounts_file.close();
     
     return true;

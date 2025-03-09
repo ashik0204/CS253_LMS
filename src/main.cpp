@@ -39,8 +39,31 @@ int main(){
             case 1: {
                 cout << "Welcome Librarian" << endl;
                 //Entering Librarian logic
+
                 Librarian librarian(uid, upassword); 
+                cout<<"Do you want to update your credentials: (press 1) or continue: (press 0)"<<endl;
+                int update;
+                cin>>update;
+                while(update){
+                    cout<<"Enter new user id"<<endl;
+                    string new_uid;
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    getline(cin, new_uid);
+                    bool flag=librarian.setUid(new_uid);
+                    if(!flag){
+                        cout<<"Please provide a different userid"<<endl;
+                        continue;
+                    }
+                    cout<<"Enter new password"<<endl;;
+                    string new_upassword;
+                    
+                    getline(cin, new_upassword);
+                    
+                    librarian.setUpassword(new_upassword);
+                    update=0;
+                }
                 int main_menu = 1;
+
                 while(main_menu) {
                     cout << "\n--------LIBRARIAN MENU--------\n"
                          << "1. User Management\n"
@@ -290,8 +313,7 @@ int main(){
                         cout<<"Please provide a different userid"<<endl;
                         continue;
                     }
-                    cout<<"Enter new password"<<endl;
-                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout<<"Enter new password"<<endl;;
                     string new_upassword;
                     
                     getline(cin, new_upassword);
@@ -305,7 +327,7 @@ int main(){
                 while(menu){
 
                     cout<<"\n--------STUDENT MENU--------\n"<<endl;
-                    cout<<"press 1 to borrow book\n"<<"press 2 to return book\n"<<"press 3 to reserve book\n"<<"press 4 to pay fine\n"<<"press 5 to check fine\n"<<"press 6 to calculate fine\n"<<"press 7 to check borrowed books\n"<<"press 8 to check borrowing history\n"<<"press 9 to check overdue books\n"<<endl;
+                    cout<<"press 1 to borrow book\n"<<"press 2 to return book\n"<<"press 3 to reserve book\n"<<"press 4 to pay fine\n"<<"press 5 to check fine\n"<<"press 6 to calculate fine\n"<<"press 7 to check borrowed books\n"<<"press 8 to check borrowing history\n"<<"press 9 to check overdue books\n"<<"press 10 to check reserved books"<<endl;
                     int choice;
                     cin>>choice;
                     switch(choice){
@@ -428,6 +450,15 @@ int main(){
                             }
                             break;
                         }
+                        case 10:{
+                            cout<<"Reserved Books are: "<<endl;
+                            student.getAccount();
+                            const auto reservedBooks = student.account.getReservedBooks();
+                            for(int i=0;i<reservedBooks.size();i++){
+                                reservedBooks[i].display();
+                            }
+                            break;
+                        }
                         default:{
                             cout<<"Invalid Choice"<<endl;
                             break;
@@ -467,7 +498,7 @@ int main(){
                 while(menu){
 
                     cout<<"\n--------FACULTY MENU--------\n"<<endl;
-                    cout<<"press 1 to borrow book\n"<<"press 2 to return book\n"<<"press 3 to reserve book\n"<<"press 4 to check borrowed books\n"<<"press 5 to check borrowing history\n"<<"press 6 to check overdue books\n"<<endl;
+                    cout<<"press 1 to borrow book\n"<<"press 2 to return book\n"<<"press 3 to reserve book\n"<<"press 4 to check borrowed books\n"<<"press 5 to check borrowing history\n"<<"press 6 to check overdue books\n"<<"press 7 to check reserved books\n"<<endl;
                     int choice;
                     cin>>choice;
                     switch(choice){
@@ -476,6 +507,7 @@ int main(){
                             cout<<"Enter bookID of book you want to borrow"<<endl;
                             string bookID;
                             Book book;
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                             getline(cin, bookID);
                             bool flag= l1.searchBook(bookID,book);
                             if(!flag){
@@ -499,6 +531,7 @@ int main(){
                             cout<<"Enter ISBN of book you want to return"<<endl;
                             string bookID;
                             Book book;
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                             getline(cin, bookID);
                             bool flag= l1.searchBook(bookID,book);
                             if(!flag){
@@ -521,6 +554,7 @@ int main(){
                             l1.displayBooksforReservation();
                             cout<<"Enter bookID of book you want to reserve"<<endl;
                             string bookID;
+                            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  
                             Book book;
                             getline(cin, bookID);
                             bool flag= l1.searchBook(bookID,book);    
@@ -561,6 +595,15 @@ int main(){
                             const auto overdueBooks = faculty.account.getOverdueBooks();
                             for(int i=0;i<overdueBooks.size();i++){
                                 overdueBooks[i].display();
+                            }
+                            break;
+                        }
+                        case 7:{
+                            cout<<"Reserved Books are: "<<endl;
+                            faculty.getAccount();
+                            const auto reservedBooks = faculty.account.getReservedBooks();
+                            for(int i=0;i<reservedBooks.size();i++){
+                                reservedBooks[i].display();
                             }
                             break;
                         }

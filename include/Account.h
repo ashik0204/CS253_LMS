@@ -10,6 +10,7 @@ private:
     std::vector<Book> borrowedBooks;
     std::vector<Book> overdueBooks; // Book + Days Overdue
     std::vector<Book> borrowingHistory;
+    std::vector<Book> reservedBooks;
     float fines;
     bool isFaculty;
 
@@ -18,12 +19,13 @@ private:
     std::string booksToCSV(const std::vector<Book>& books) const;
     void csvToBooks(const std::string& csv, std::vector<Book>& target);
     void updateBookInCSV(const Book& book);
+    bool bookinReserved(const std::string& bookID) ;
 
 public:
     explicit Account(bool faculty = false);
     
     // Core functionality
-    int calculateFine(int overdueDays) const;
+    int calculateFine(int overdueDays) const ;
     bool borrowBook(Book& book, std::string Uid);
     bool returnBook(Book& book, std::string Uid);
     bool reserveBook(Book& book, std::string Uid);
@@ -39,5 +41,6 @@ public:
     const std::vector<Book>& getBorrowedBooks() const;
     const std::vector<Book>& getOverdueBooks() const;
     const std::vector<Book>& getBorrowingHistory() const;
+    const std::vector<Book>& getReservedBooks() const;
     void display(std::string uid) const;
 };
