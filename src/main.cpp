@@ -20,6 +20,7 @@ int main(){
         string upassword;
         cin>>upassword;
         int role;
+        //Entering Library logic
         Library l1;
         while(!l1.authenticateUser(uid,upassword,role)){
             cout<<"Do you want to exit: (press 0) or login again: (press 1)"<<endl;
@@ -36,9 +37,9 @@ int main(){
         switch(role){
             case 1: {
                 cout << "Welcome Librarian" << endl;
+                //Entering Librarian logic
                 Librarian librarian(uid, upassword); 
                 int main_menu = 1;
-                
                 while(main_menu) {
                     cout << "\n--------LIBRARIAN MENU--------\n"
                          << "1. User Management\n"
@@ -57,11 +58,11 @@ int main(){
                                  << "0. Back\n"
                                  << "Choice: ";
                             cin >> user_menu;
-            
+
                             string uid_input, new_uid, password;
-                            User found_user("", "");
                             
                             switch(user_menu) {
+
                                 case 1: {
                                     int role;
                                     cout << "Enter new user ID: ";
@@ -78,6 +79,7 @@ int main(){
                                     }
                                     break;
                                 }
+                                
                                 case 2: {
                                     cout << "Enter user ID to delete: ";
                                     cin >> uid_input;
@@ -120,10 +122,8 @@ int main(){
                                 case 3: {
                                     cout << "Enter user ID to search: ";
                                     cin >> uid_input;
-                                    if(librarian.search_user(uid_input, found_user)) {
-                                        cout << "User found!\n"
-                                             << "UID: " << found_user.getUid() << endl
-                                             << "Password: " << found_user.getUpassword() << endl;
+                                    if(librarian.search_user(uid_input)) {  \
+
                                     } else {
                                         cout << "User not found!" << endl;
                                     }
@@ -140,6 +140,7 @@ int main(){
                     }
                     else if(main_menu == 2) {  // Book Management
                         int book_menu = 1;
+                        checkinput checkinput_obj;
                         while(book_menu) {
                             cout << "\n--------BOOK MANAGEMENT--------\n"
                                  << "1. Add Book\n"
@@ -167,9 +168,19 @@ int main(){
                                     cout << "Enter publication year: ";
                                     cin >> year;
                                     cout << "Enter ISBN: ";
+                                    
                                     cin >> ISBN;
-                                    cout << "Enter initial status (Available/Borrowed): ";
+                                    while(!checkinput_obj.ISBN_check(ISBN)){
+                                        cout<<"Enter a valid ISBN: ";
+                                        cin>>ISBN;
+                                    }
+                                    checkinput_obj.ISBN_standardize(ISBN);
+                                    cout << "Enter initial status (Available/Borrowed/Reserved): ";
                                     cin >> status;
+                                    while(!checkinput_obj.status_check(status)){
+                                        cout<<"Enter a valid status: ";
+                                        cin>>status;
+                                    }
                                     
                                     dueDate = 0;  // Default
                                     if(status=="Borrowed") {
@@ -202,6 +213,7 @@ int main(){
                                         }
                                         case 2:{
                                             cout<<"Book is currently borrowed, cannot delete!"<<endl;
+                                            break;
                                         }
                                         default:{
                                             cout<<"Unknown error!"<<endl;
@@ -211,7 +223,7 @@ int main(){
                                     break;
                                 }
                                 case 3: {
-                                    checkinput checkinput_obj;
+                                    
                                     cout << "Enter ISBN to update(a 13 digit number(- allowed between numbers)): ";
                                     cin >> ISBN;
                                     while(checkinput_obj.ISBN_check(ISBN) == false){

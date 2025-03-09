@@ -1,11 +1,12 @@
 
 #include "Librarian.h"
+#include "User.h"
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <algorithm>
 
-// Constructor
+//helper functions
 bool checkifISBNexists(std::string ISBN){
     std::ifstream file("data/books.csv");
     if (!file.is_open()) return false;
@@ -45,6 +46,7 @@ bool checkifUIDexists(std::string uid){
     }
     return false;
 }
+// Constructor
 Librarian::Librarian(std::string uid, const std::string &upassword) 
     : User(uid, upassword) {}
 
@@ -178,21 +180,21 @@ int Librarian::delete_user(std::string uid) {
 //     return found;
 // }
 
-bool Librarian::search_user(std::string uid, User &user) {
+bool Librarian::search_user(std::string uid) {
     std::ifstream file("data/users.csv");
     std::string line;
     //skip header
     std::getline(file, line);
-    while(std::getline(file, line)) {
+    while(std::getline(file, line)){
         std::stringstream ss(line);
-        std::string current_uid, password, role;
+        std::string current_uid;
         std::getline(ss, current_uid, ',');
-        std::getline(ss, password, ',');
-        std::getline(ss, role, ',');
-
-        if(current_uid == uid) {
-            user.setUid(current_uid);
-            user.setUpassword(password);
+        if(current_uid==uid) {
+            std::string current_upassword;
+            std::getline(ss, current_upassword, ',');
+            User current_user(current_uid, current_upassword);
+            current_user.getAccount();
+            current_user.account.display(uid);
             return true;
         }
     }

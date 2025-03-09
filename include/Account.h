@@ -39,4 +39,5 @@ public:
     const std::vector<Book>& getBorrowedBooks() const;
     const std::vector<Book>& getOverdueBooks() const;
     const std::vector<Book>& getBorrowingHistory() const;
+    void display(std::string uid) const;
 };

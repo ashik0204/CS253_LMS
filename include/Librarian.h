@@ -12,7 +12,7 @@ public:
     bool create_user(std::string uid, std::string upassword,int role);
     int delete_user(std::string uid);
     // bool update_user(std::string old_uid,std::string new_uid, std::string new_upassword);
-    bool search_user(std::string uid, User &user);
+    bool search_user(std::string uid);
     bool addbook(std::string title, std::string author, std::string publisher, int year, std::string ISBN, std::string status, std::time_t dueDate);
     int deletebook(std::string ISBN);
     bool updatebook(std::string ISBN, std::string status);

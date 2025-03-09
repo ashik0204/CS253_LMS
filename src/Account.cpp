@@ -247,3 +247,43 @@ float Account::getFines() const { return fines; }
 const std::vector<Book>& Account::getBorrowedBooks() const { return borrowedBooks; }
 const std::vector<Book>& Account::getOverdueBooks() const { return overdueBooks; }
 const std::vector<Book>& Account::getBorrowingHistory() const { return borrowingHistory; }
+void Account::display(std::string uid) const {
+    std::cout << "\n--------ACCOUNT INFORMATION--------\n"
+              << "UID: " << uid << "\n"
+              << "isFaculty: " << (isFaculty ? "true" : "false") << "\n"
+              << "Fines: " << fines << "\n"
+              << "Borrowed books: " << borrowedBooks.size() << "\n"
+              << "Overdue books: " << overdueBooks.size() << "\n"
+              << "Borrowing history: " << borrowingHistory.size() << std::endl;
+    std::cout<<"Do you want to display borrowed books? (y/n): ";
+    std::string choice;
+    std::cin>>choice;
+    
+    if (choice == "y") {
+        std::cout << "\n--------BORROWED BOOKS--------\n";
+        for (const auto& book : borrowedBooks) {
+            book.display();
+        }
+    }
+
+    std::cout<<"Do you want to display overdue books? (y/n): ";
+    std::cin>>choice;
+    
+    if (choice == "y") {
+        std::cout << "\n--------OVERDUE BOOKS--------\n";
+        for (const auto& book : overdueBooks) {
+            book.display();
+        }
+    }
+    std::cout<<"Do you want to display borrowing history? (y/n): ";
+    std::cin>>choice;
+    
+    if (choice == "y") {
+        std::cout << "\n--------BORROWING HISTORY--------\n";
+        for (const auto& book : borrowingHistory) {
+            book.display();
+        }
+    }
+    
+
+}
