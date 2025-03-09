@@ -22,7 +22,6 @@ bool Student::borrowBook( Book &book) {
     return account.borrowBook(book,uid);
 }
 bool Student::returnBook(Book &book) {
-    std::cout<<"HERE"<<std::endl;
     getAccount();
     return account.returnBook(book,uid);
 }
@@ -34,18 +33,7 @@ void Student::payFine(float amount,std::string Uid) {
     getAccount();
     account.payFine(amount,Uid);
 }
-// std::vector<Book>& Student::getBorrowingHistory(){
-//     getAccount();
-//     return account.getBorrowingHistory();
-// }
-// std::vector<Book>& Student::getBorrowedBooks(){
-//     getAccount();
-//     return account.getBorrowedBooks();
-// }
-// std::vector<Book>& Student::getOverdueBooks(){
-//     getAccount();
-//     return account.getOverdueBooks();
-// }
+
 
 
 

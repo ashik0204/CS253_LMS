@@ -17,11 +17,10 @@ std::string User::getUpassword() const {
 }
  
 Account User::getAccount() {
-    // std::cout<<"HERE"<<std::endl;
     std::ifstream file("data/accounts.csv");
-    // std::cout<<"HERE2"<<std::endl;
+  
     account.loadFromFile(file,uid);
-    // std::cout<<"HERE3"<<std::endl;
+
     return account;
 }
 //setters

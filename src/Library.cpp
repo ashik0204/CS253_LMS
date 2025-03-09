@@ -13,6 +13,35 @@ Library::Library() {}
 
 Library::~Library() {}
 
+void Library::displayBooks() const{
+    std::ifstream fin("data/books.csv");
+    if (!fin.is_open()) {
+        std::cerr << "Error: Unable to open books file" << std::endl;
+        return;
+    }       
+
+    std::string line;
+    // Skip header line
+    std::getline(fin, line);
+    std::cout<<"ISBN\tTitle"<<std::endl;
+    while (std::getline(fin, line)) {
+        std::stringstream ss(line);
+        std::string ISBN, title,status;
+        //loading title
+        std::getline(ss, title, ',');
+        //ignoring other fields
+        std::string temp;
+        for(int i=0;i<3;i++) {
+            std::getline(ss, temp, ',');
+        }
+        //loading ISBN
+        std::getline(ss, ISBN, ',');
+        std::getline(ss, status, ',');
+        if(status=="Available"||status=="available") std::cout<<ISBN<<"\t"<<title<<std::endl;
+    }
+    fin.close();
+}
+
 bool Library::authenticateUser(const std::string& uid, 
                         const std::string& upassword,
                         int& outRole) 

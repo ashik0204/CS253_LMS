@@ -8,19 +8,30 @@
 // Constructor
 bool checkifISBNexists(std::string ISBN){
     std::ifstream file("data/books.csv");
+    if (!file.is_open()) return false;
 
     std::string line;
-    //skip header
+    
+    // Skip header
     std::getline(file, line);
 
     while(std::getline(file, line)){
         std::stringstream ss(line);
-        std::string currentISBN;
+        std::string title, author, publisher, year, currentISBN, status, dueDate;
+
+        std::getline(ss, title, ',');
+        std::getline(ss, author, ',');
+        std::getline(ss, publisher, ',');
+        std::getline(ss, year, ',');
+        //5th field is the ISBN
         std::getline(ss, currentISBN, ',');
-        if(currentISBN==ISBN) return true;
+
+        if(currentISBN == ISBN) return true;
     }
+    
     return false;
 }
+
 bool checkifUIDexists(std::string uid){
     std::ifstream file("data/users.csv");
     std::string line;
@@ -58,25 +69,10 @@ bool Librarian::create_user(std::string uid, std::string upassword, int role) {
 }
 
 
-bool Librarian::delete_user(std::string uid) {
-    // Delete from users.csv
-    int flag=0;
-    std::vector<std::string> users_lines;
-    std::ifstream users_in("data/users.csv");
-    std::string line;
-    while(std::getline(users_in, line)) {
-        std::string current_uid;
-        std::stringstream ss(line);
-        std::getline(ss, current_uid, ',');
-        if(current_uid == uid) flag=1;
-        if(current_uid != uid) users_lines.push_back(line);
-    }
-    users_in.close();
+int Librarian::delete_user(std::string uid) {
     
-    std::ofstream users_out("data/users.csv");
-    for(const auto& l : users_lines) users_out << l << "\n";
-    users_out.close();
-
+    int flag=0;
+    std::string line;
     // Delete from accounts.csv
     std::vector<std::string> accounts_lines;
     std::ifstream accounts_in("data/accounts.csv");
@@ -85,74 +81,108 @@ bool Librarian::delete_user(std::string uid) {
         std::stringstream ss(line);
         std::getline(ss, current_uid, ',');
         if(current_uid != uid) accounts_lines.push_back(line);
+        if(current_uid == uid) {
+            flag=1;
+            std::string temp;
+            for(int i=0;i<2;i++){
+                std::getline(ss, temp, ',');
+            }
+            std::string borrowed, overdue;
+            std::getline(ss, borrowed, ',');
+            std::getline(ss, overdue, ',');
+            if(borrowed!=""||overdue!="") flag=2;
+            accounts_lines.push_back(line);
+        }
+
     }
     accounts_in.close();
     
     std::ofstream accounts_out("data/accounts.csv");
     for(const auto& l : accounts_lines) accounts_out << l << "\n";
     accounts_out.close();
+    // Delete from users.csv
+    std::vector<std::string> users_lines;
+    std::ifstream users_in("data/users.csv");
+    
+    while(std::getline(users_in, line)) {
+        std::string current_uid;
+        std::stringstream ss(line);
+        std::getline(ss, current_uid, ',');
+        if(current_uid != uid) users_lines.push_back(line);
+        if(flag==2 && current_uid == uid) {
+            users_lines.push_back(line);
+        }
+    }
+    users_in.close();
+    
+    std::ofstream users_out("data/users.csv");
+    for(const auto& l : users_lines) users_out << l << "\n";
+    users_out.close();
+
+   
 
     return flag;
 }
 
-bool Librarian::update_user(std::string old_uid, std::string new_uid, std::string new_password) {
-    // Update users.csv
-    std::string line;
-    std::vector<std::string> users_lines;
-    bool found = false;
-    std::ifstream users_in("data/users.csv");
+// bool Librarian::update_user(std::string old_uid, std::string new_uid, std::string new_password) {
+//     // Update users.csv
+//     std::string line;
+//     std::vector<std::string> users_lines;
+//     bool found = false;
+//     std::ifstream users_in("data/users.csv");
     
-    while(std::getline(users_in, line)) {
-        std::stringstream ss(line);
-        std::string current_uid, password, role;
-        std::getline(ss, current_uid, ',');
-        std::getline(ss, password, ',');
-        std::getline(ss, role, ',');
+//     while(std::getline(users_in, line)) {
+//         std::stringstream ss(line);
+//         std::string current_uid, password, role;
+//         std::getline(ss, current_uid, ',');
+//         std::getline(ss, password, ',');
+//         std::getline(ss, role, ',');
 
-        if(current_uid == old_uid) {
-            line = new_uid + "," + new_password + "," + role;
-            found = true;
-        }
-        users_lines.push_back(line);
-    }
-    users_in.close();
+//         if(current_uid == old_uid) {
+//             line = new_uid + "," + new_password + "," + role;
+//             found = true;
+//         }
+//         users_lines.push_back(line);
+//     }
+//     users_in.close();
 
-    if(found) {
-        std::ofstream users_out("data/users.csv");
-        for(const auto& l : users_lines) users_out << l << "\n";
-        users_out.close();
-    }
+//     if(found) {
+//         std::ofstream users_out("data/users.csv");
+//         for(const auto& l : users_lines) users_out << l << "\n";
+//         users_out.close();
+//     }
 
-    // Update accounts.csv
-    std::vector<std::string> accounts_lines;
-    std::ifstream accounts_in("data/accounts.csv");
+//     // Update accounts.csv
+//     std::vector<std::string> accounts_lines;
+//     std::ifstream accounts_in("data/accounts.csv");
     
-    while(std::getline(accounts_in, line)) {
-        std::stringstream ss(line);
-        std::string current_uid, rest;
-        std::getline(ss, current_uid, ',');
-        std::getline(ss, rest);
+//     while(std::getline(accounts_in, line)) {
+//         std::stringstream ss(line);
+//         std::string current_uid, rest;
+//         std::getline(ss, current_uid, ',');
+//         std::getline(ss, rest);
         
-        if(current_uid == old_uid) {
-            line = new_uid + "," + rest;
-        } 
-        accounts_lines.push_back(line);
-    }
-    accounts_in.close();
+//         if(current_uid == old_uid) {
+//             line = new_uid + "," + rest;
+//         } 
+//         accounts_lines.push_back(line);
+//     }
+//     accounts_in.close();
 
-    if(found) {
-        std::ofstream accounts_out("data/accounts.csv");
-        for(const auto& l : accounts_lines) accounts_out << l << "\n";
-        accounts_out.close();
-    }
+//     if(found) {
+//         std::ofstream accounts_out("data/accounts.csv");
+//         for(const auto& l : accounts_lines) accounts_out << l << "\n";
+//         accounts_out.close();
+//     }
 
-    return found;
-}
+//     return found;
+// }
 
 bool Librarian::search_user(std::string uid, User &user) {
     std::ifstream file("data/users.csv");
     std::string line;
-    
+    //skip header
+    std::getline(file, line);
     while(std::getline(file, line)) {
         std::stringstream ss(line);
         std::string current_uid, password, role;
@@ -161,7 +191,7 @@ bool Librarian::search_user(std::string uid, User &user) {
         std::getline(ss, role, ',');
 
         if(current_uid == uid) {
-            user.setUid(uid);
+            user.setUid(current_uid);
             user.setUpassword(password);
             return true;
         }
@@ -182,7 +212,7 @@ bool Librarian::addbook(std::string title, std::string author, std::string publi
     return true;
 }
 
-bool Librarian::deletebook(std::string ISBN) {
+int Librarian::deletebook(std::string ISBN) {
     std::vector<std::string> lines;
     std::ifstream in("data/books.csv");
     std::string line;
@@ -196,7 +226,15 @@ bool Librarian::deletebook(std::string ISBN) {
         std::string current_ISBN;
         for(int i = 0; i < 4; i++) ss.ignore(1000, ',');
         std::getline(ss, current_ISBN, ',');
-        if(current_ISBN == ISBN) flag=1;
+        if(current_ISBN == ISBN) {
+            flag=1;
+            std::string status;
+            std::getline(ss, status, ',');
+            if(status == "Borrowed") {
+                flag=2;
+                lines.push_back(line);
+            }
+        }
         if(current_ISBN != ISBN) {
             lines.push_back(line);
         }
@@ -211,13 +249,13 @@ bool Librarian::deletebook(std::string ISBN) {
     return flag;
 }
 
-bool Librarian::updatebook(std::string ISBN, std::string new_status, int n_dueDate) {
+bool Librarian::updatebook(std::string ISBN, std::string new_status) {
     int flag=0;
     std::vector<std::string> lines;
     std::ifstream in("data/books.csv");
     std::string line;
-    std::time_t new_dueDate = std::time(0) + n_dueDate * 24 * 60 * 60;
-    if(n_dueDate == 0) new_dueDate = 0;
+    // std::time_t new_dueDate = std::time(0) + n_dueDate * 24 * 60 * 60;
+    // if(n_dueDate == 0) new_dueDate = 0;
     // Read header
     std::getline(in, line);
     lines.push_back(line);
@@ -228,11 +266,10 @@ bool Librarian::updatebook(std::string ISBN, std::string new_status, int n_dueDa
         for(int i = 0; i < 7; i++) {
             std::getline(ss, parts[i], ',');
         }
-        
         if(parts[4] == ISBN) {
             flag=1;
-            parts[5] = new_status;
-            parts[6] = std::to_string(new_dueDate);
+            parts[5] = (parts[5]=="Borrowed")? parts[5]:new_status;
+            parts[6] = (parts[5]=="Borrowed")? parts[6]:"0";
             line = parts[0] + "," + parts[1] + "," + parts[2] + "," 
                  + parts[3] + "," + parts[4] + "," + parts[5] + "," + parts[6];
         }

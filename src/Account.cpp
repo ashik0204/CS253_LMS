@@ -7,47 +7,13 @@
 #include <iostream>
 #include <algorithm>
 #include <ctime>
-// bool Account::searchBookInCSV(const std::string& ISBN, Book &book) {
-//     std::ifstream fin("data/books.csv");
-//     if (!fin.is_open()) return false;
-
-//     std::string line;
-//     // Skip header
-//     std::getline(fin, line);
-
-//     while (std::getline(fin, line)) {
-//         std::stringstream ss(line);
-//         std::string field;
-        
-//         // Skip first 4 fields (title, author, publisher, year)
-//         for (int i = 0; i < 4; i++) {
-//             std::getline(ss, field, ',');
-//         }
-        
-//         // Read 5th field (ISBN)
-//         std::string currentISBN;
-//         std::getline(ss, currentISBN, ',');
-
-//         if (currentISBN == ISBN) {
-//             // Instead of resetting the stream, just pass it directly
-//             book.loadFromCSV(ss);  
-//             fin.close();
-//             return true;
-//         }
-//     }
-    
-//     fin.close();
-//     return false;
-// }
-
-
-// Constructor
+//constructor
 Account::Account(bool faculty) : isFaculty(faculty), fines(0.0f) {}
 
 // Core functionality implementation
 bool Account::borrowBook(Book& book,std::string Uid) {
-    std::cout<<canBorrow()<<" "<<book.getStatus()<<std::endl;
-    if (canBorrow() && book.getStatus() == "available") {
+    // std::cout<<canBorrow()<<" "<<book.getStatus()<<std::endl;
+    if (canBorrow() && (book.getStatus() == "available"||book.getStatus() == "Available")) {
         book.setStatus("Borrowed");
         book.setDueDate((isFaculty ? 30 : 15) );
         borrowedBooks.push_back(book);
@@ -61,7 +27,7 @@ bool Account::borrowBook(Book& book,std::string Uid) {
 }
 
 bool Account::returnBook(Book& book,std::string Uid) {
-    // std::cout<<"HERE"<<std::endl;
+
     auto it = std::find_if(borrowedBooks.begin(), borrowedBooks.end(),
         [&book](const Book& b) { return b.getISBN() == book.getISBN(); });
         // std::cout<<"HERE"<<std::endl;
@@ -76,7 +42,7 @@ bool Account::returnBook(Book& book,std::string Uid) {
         }
 
         // Update book status and history
-        book.setStatus("available");
+        book.setStatus("Available");
         book.setDueDate(0); // Reset due date
         borrowingHistory.push_back(*it);
         
@@ -99,7 +65,7 @@ bool Account::returnBook(Book& book,std::string Uid) {
 }
 bool Account::reserveBook(Book& book,std::string Uid) {
     
-    if (canBorrow()&&book.getStatus() == "available") {
+    if (canBorrow()&&(book.getStatus() == "available"||book.getStatus() == "Available")) {
         book.setStatus("Reserved");
         updateAccount(Uid);
         updateBookInCSV(book);
@@ -141,17 +107,15 @@ std::string Account::booksToCSV(const std::vector<Book>& books) const {
 
 void Account::csvToBooks(const std::string& csv, std::vector<Book>& target) {
     target.clear();
-    // std::cout<<"HERE7"<<std::endl;
     std::stringstream ss(csv);
     std::string entry;
     Library l1;
     while (std::getline(ss, entry, '|')) {
-        // std::cout<<"HERE8"<<std::endl;
+        
         Book b;
-        // std::cout<<entry<<std::endl;
+        
         if(entry!=""){if(l1.searchBook(entry, b)) {
-            // std::cout<<"HERE9"<<std::endl;
-            // b.display();
+            
             target.push_back(b);
         }}
     }
@@ -199,7 +163,7 @@ void Account::saveToFile(std::ofstream& file,const std::string &uid) const {
 }
 
 bool Account::loadFromFile( std::ifstream &file, const std::string &targetuid) {
-    // std::cout<<"HERE4"<<std::endl;
+
     std::string line;
     
     // Skip header
@@ -220,10 +184,10 @@ bool Account::loadFromFile( std::ifstream &file, const std::string &targetuid) {
             // Read fines
             std::getline(ss, field, ',');
             fines = std::stof(field);
-            // std::cout<<"HERE5"<<std::endl;
+     
             // Load borrowed books
             std::getline(ss, field, ',');
-            // std::cout<<"HERE6"<<std::endl;
+
             csvToBooks(field, borrowedBooks);
            
             // Load overdue books

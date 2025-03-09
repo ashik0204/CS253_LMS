@@ -53,8 +53,7 @@ int main(){
                             cout << "\n--------USER MANAGEMENT--------\n"
                                  << "1. Add User\n"
                                  << "2. Delete User\n"
-                                 << "3. Update User\n"
-                                 << "4. Search User\n"
+                                 << "3. Search User\n"
                                  << "0. Back\n"
                                  << "Choice: ";
                             cin >> user_menu;
@@ -82,29 +81,43 @@ int main(){
                                 case 2: {
                                     cout << "Enter user ID to delete: ";
                                     cin >> uid_input;
-                                    if(librarian.delete_user(uid_input)) {
-                                        cout << "User deleted successfully!" << endl;
-                                    } else {
-                                        cout << "User not found!" << endl;
+                                    int case_del=librarian.delete_user(uid_input);
+                                    switch(case_del){
+                                        case 0:{
+                                            cout << "User not found!" << endl;
+                                            break;
+                                        }
+                                        case 1:{
+                                            cout << "User deleted successfully!" << endl;
+                                            break;
+                                        }
+                                        case 2:{
+                                            cout<<"User has borrowed/overdue books, cannot delete!"<<endl;
+                                            break;
+                                        }
+                                        default:{
+                                            cout<<"Unknown error!"<<endl;
+                                            break;
+                                        }
                                     }
                                     break;
                                 }
-                                case 3: {
-                                    cout << "Enter old user ID: ";
-                                    cin >> uid_input;
-                                    cout << "Enter new user ID: ";
-                                    cin >> new_uid;
-                                    cout << "Enter new password: ";
-                                    cin >> password;
+                                // case 3: {
+                                //     cout << "Enter old user ID: ";
+                                //     cin >> uid_input;
+                                //     cout << "Enter new user ID: ";
+                                //     cin >> new_uid;
+                                //     cout << "Enter new password: ";
+                                //     cin >> password;
                                     
-                                    if(librarian.update_user(uid_input, new_uid, password)) {
-                                        cout << "User updated successfully!" << endl;
-                                    } else {
-                                        cout << "User update failed!" << endl;
-                                    }
-                                    break;
-                                }
-                                case 4: {
+                                //     if(librarian.update_user(uid_input, new_uid, password)) {
+                                //         cout << "User updated successfully!" << endl;
+                                //     } else {
+                                //         cout << "User update failed!" << endl;
+                                //     }
+                                //     break;
+                                // }
+                                case 3: {
                                     cout << "Enter user ID to search: ";
                                     cin >> uid_input;
                                     if(librarian.search_user(uid_input, found_user)) {
@@ -177,24 +190,55 @@ int main(){
                                 case 2: {
                                     cout << "Enter ISBN to delete: ";
                                     cin >> ISBN;
-                                    if(librarian.deletebook(ISBN)){
-                                        cout << "Book deleted successfully!" << endl;
-                                    }
-                                    else{
-                                        cout << "Book not found!" << endl;
+                                    int case_del=librarian.deletebook(ISBN);
+                                    switch(case_del){
+                                        case 0:{
+                                            cout << "Book not found!" << endl;
+                                            break;
+                                        }
+                                        case 1:{
+                                            cout << "Book deleted successfully!" << endl;
+                                            break;
+                                        }
+                                        case 2:{
+                                            cout<<"Book is currently borrowed, cannot delete!"<<endl;
+                                        }
+                                        default:{
+                                            cout<<"Unknown error!"<<endl;
+                                            break;
+                                        }
                                     }
                                     break;
                                 }
                                 case 3: {
-                                    cout << "Enter ISBN to update: ";
+                                    checkinput checkinput_obj;
+                                    cout << "Enter ISBN to update(a 13 digit number(- allowed between numbers)): ";
                                     cin >> ISBN;
+                                    while(checkinput_obj.ISBN_check(ISBN) == false){
+                                        cout << "Invalid input!\n" <<"ISBN has to be a 13 digit number"<< endl;
+                                        cout << "Enter ISBN to update: ";
+                                        cin >> ISBN;
+                                    }
+                                    checkinput_obj.ISBN_standardize(ISBN);
                                     cout << "Enter new status: ";
+                                    // cin.ignore();
+                                    // try{
+                                    //     if(status!="Available" && status!="Borrowed" && status!="Reserved"){
+                                    //         throw 1;
+                                    //     }
+                                    //     catch(...){
+                                    //         cout<<"Invalid input!"<<endl;
+                                    //         break;
+                                    //     }
+                                    // }
+
                                     cin >> status;
-                                    cout << "Enter due in how many days (0 for available): ";
-                                    int days;
-                                    cin >> days;
-                                    
-                                    if(librarian.updatebook(ISBN, status, days)){
+                                    while(checkinput_obj.status_check(status) == false){
+                                        cout << "Invalid input!" << endl;
+                                        cout << "Enter new status:\n"<<"(Available/Borrowed/Reserved): ";
+                                        cin >> status;
+                                    }
+                                    if(librarian.updatebook(ISBN, status)){
                                         cout << "Book updated successfully!" << endl;
                                     }
                                     else{
@@ -261,11 +305,12 @@ int main(){
                 while(menu){
 
                     cout<<"\n--------STUDENT MENU--------\n"<<endl;
-                    cout<<"press 1 to borrow book\n"<<"press 2 to return book\n"<<"press 3 to reserve book\n"<<"press 4 to pay fine\n"<<"press 5 to check fine\n"<<"press 6 to check borrowed books\n"<<"press 7 to check borrowing history\n"<<"press 8 to check overdue books\n"<<endl;
+                    cout<<"press 1 to borrow book\n"<<"press 2 to return book\n"<<"press 3 to reserve book\n"<<"press 4 to pay fine\n"<<"press 5 to check fine\n"<<"press 6 to calculate fine\n"<<"press 7 to check borrowed books\n"<<"press 8 to check borrowing history\n"<<"press 9 to check overdue books\n"<<endl;
                     int choice;
                     cin>>choice;
                     switch(choice){
                         case 1:{
+                            l1.displayBooks();
                             cout<<"Enter ISBN of book you want to borrow"<<endl;
                             string ISBN;
                             Book book;
@@ -311,6 +356,7 @@ int main(){
                             break;
                         }
                         case 3:{
+                            l1.displayBooks();
                             cout<<"Enter ISBN of book you want to reserve"<<endl;
                             string ISBN;
                             Book book;
@@ -342,6 +388,13 @@ int main(){
                             break;
                         }
                         case 6:{
+                            cout<<"Enter overdue days"<<endl;
+                            int days;
+                            cin>>days;
+                            cout<<"Your fine is: "<<student.calculateFine(days)<<endl;
+                            break;
+                        }
+                        case 7:{
                             cout<<"Borrowed Books are: "<<endl;
                             student.getAccount();
                             const auto borrowedBooks = student.account.getBorrowedBooks();
@@ -350,7 +403,7 @@ int main(){
                             }
                             break;
                         }
-                        case 7:{
+                        case 8:{
                             cout<<"Borrowing History is: "<<endl;
                             student.getAccount();
                             const auto borrowingHistory = student.account.getBorrowingHistory();
@@ -359,7 +412,7 @@ int main(){
                             }
                             break;
                         }
-                        case 8:{
+                        case 9:{
                             cout<<"Overdue Books are: "<<endl;
                             student.getAccount();
                             const auto overdueBooks = student.account.getOverdueBooks();
